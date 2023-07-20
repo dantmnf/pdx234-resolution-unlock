@@ -1,0 +1,17 @@
+task packageMagisk(type: Zip) {
+    dependsOn(":overlay-settings:packageRelease")
+    dependsOn(":overlay-frameworkres:packageRelease")
+    from('module/') {
+        include '**/*'
+    }
+    from(tasks.getByPath(":overlay-settings:packageRelease").outputs.files.asFileTree.filter { it.name.endsWith(".apk") }) {
+        into("system/product/overlay/")
+        rename(".*\\.apk", "pdx234-resolution-settings-overlay.apk")
+    }
+    from(tasks.getByPath(":overlay-frameworkres:packageRelease").outputs.files.asFileTree.filter { it.name.endsWith(".apk") }) {
+        into("system/product/overlay/")
+        rename(".*\\.apk", "pdx234-resolution-frameworkres-overlay.apk")
+    }
+    archiveFileName = 'pdx234-resolution-magisk.zip'
+    destinationDirectory = file("$rootDir/build")
+}

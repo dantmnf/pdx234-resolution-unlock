@@ -1,0 +1,35 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'xyz.cirno.pdx234.resolution_sup'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "xyz.cirno.pdx234.resolution_sup"
+        minSdk 33
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+        // coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+    compileOnly project(':hidden-api')
+    compileOnly("de.robv.android.xposed:api:82")
+    // coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+}

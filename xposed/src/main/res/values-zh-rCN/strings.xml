@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PDX234 高分辨率补充模块</string>
+    <string name="xposed_description">高分辨率模式的原生设置界面及应用兼容性修复</string>
+</resources>

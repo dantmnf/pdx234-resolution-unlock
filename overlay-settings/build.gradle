@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.pdx234resolution.settings.overlay'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.pdx234resolution.settings.overlay"
+        minSdk 33
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources false
+            // sign overlay apk with random key
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            minifyEnabled true
+            shrinkResources false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        buildConfig = false
+        resValues = false
+    }
+}
+
+dependencies {
+
+}

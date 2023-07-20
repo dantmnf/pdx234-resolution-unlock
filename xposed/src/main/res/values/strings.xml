@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PDX234 High Resolution Supplemental</string>
+    <string name="xposed_description">Settings UI and app compatibility fixes for high resolution mode.</string>
+</resources>
