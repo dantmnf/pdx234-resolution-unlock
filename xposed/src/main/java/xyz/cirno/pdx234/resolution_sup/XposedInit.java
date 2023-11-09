@@ -2,7 +2,9 @@ package xyz.cirno.pdx234.resolution_sup;
 
 import android.content.Context;
 import android.os.Binder;
+import android.os.Build;
 import android.provider.Settings;
+import android.util.AttributeSet;
 import android.view.Display;
 import android.view.DisplayInfo;
 
@@ -26,6 +28,28 @@ public class XposedInit implements IXposedHookLoadPackage{
     }
 
     private void handleLoadSettings(XC_LoadPackage.LoadPackageParam lpparam) {
+
+        if (Build.VERSION.SDK_INT >= 34) {
+            final var removeClass = XposedHelpers.findClass("com.sonymobile.settings.preference.RemovePreference", lpparam.classLoader);
+            final var targetKeyField = XposedHelpers.findField(removeClass, "mTargetKey");
+            targetKeyField.setAccessible(true);
+            XposedHelpers.findAndHookConstructor(removeClass, Context.class, AttributeSet.class, int.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    if (param.hasThrowable()) return;
+                    final String mTargetKey = (String) targetKeyField.get(param.thisObject);
+                    if ("screen_resolution".equals(mTargetKey)) {
+                        targetKeyField.set(param.thisObject, "screen_resolution_1145141919");
+                    }
+                }
+            });
+        }
+
+        if (Build.VERSION.SDK_INT == 33) {
+            unfuckAndroid13Release(lpparam);
+        }
+    }
+    private static void unfuckAndroid13Release(XC_LoadPackage.LoadPackageParam lpparam) {
         var screenResolutionControllerClass = XposedHelpers.findClass("com.android.settings.display.ScreenResolutionController", lpparam.classLoader);
         XposedHelpers.findAndHookMethod(screenResolutionControllerClass, "getAvailabilityStatus", new XC_MethodReplacement() {
             @Override

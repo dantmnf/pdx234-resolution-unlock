@@ -1,4 +1,9 @@
 # query WindowManagerService for mSystemBooted=true
+if [ "$(getprop ro.build.version.sdk)" = 33 ]
+then
+  exit 0
+fi
+
 count=0
 while let "count++ < 100"
 do
