@@ -16,6 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "Pdx234Resolution"
 include ':xposed'
 include ':overlay-frameworkres'
-include ':overlay-settings'
 include ':hidden-api'
 include ':magisk'

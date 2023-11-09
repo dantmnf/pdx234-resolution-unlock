@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/hidden-api" />
             <option value="$PROJECT_DIR$/magisk" />
             <option value="$PROJECT_DIR$/overlay-frameworkres" />
-            <option value="$PROJECT_DIR$/overlay-settings" />
             <option value="$PROJECT_DIR$/xposed" />
           </set>
         </option>

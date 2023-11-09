@@ -1,6 +1,0 @@
-<resources>
-    <!-- Display settings screen, "FHD+" screen resolution summary [CHAR LIMIT=NONE] -->
-    <string name="screen_resolution_summary_high" translatable="false">1096×2560</string>
-    <!-- Display settings screen, "QHD+" screen resolution summary [CHAR LIMIT=NONE] -->
-    <string name="screen_resolution_summary_highest" translatable="false">1644×3840</string>
-</resources>
