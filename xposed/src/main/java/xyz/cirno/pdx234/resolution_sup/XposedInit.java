@@ -90,26 +90,30 @@ public class XposedInit implements IXposedHookLoadPackage{
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 final var displayId = (int) param.args[0];
-                final var callingUid = Binder.getCallingUid();
-                if (displayId == 0 && callingUid >= 10000) {
-                    // calling from user app for internal display
-                    // filter inactive modes to workaround buggy apps that assumes the first mode is the active mode
+                if (displayId == 0) {
+                    // calling for internal display
                     var info = (DisplayInfo) param.getResult();
                     if (info == null) return;
-                    final var modeId = info.modeId;
                     final var supportedModes = info.supportedModes;
-                    var activeMode = Arrays.stream(supportedModes).filter(m -> m.getModeId() == modeId).findFirst().orElse(null);
-                    var firstMode = supportedModes.length > 0 ? supportedModes[0] : null;
-                    if (firstMode == null || activeMode == null) return;
-                    final var activeWidth = activeMode.getPhysicalWidth();
-                    final var activeHeight = activeMode.getPhysicalHeight();
-                    if (firstMode.getPhysicalWidth() != activeWidth || firstMode.getPhysicalHeight() != activeHeight) {
-                        var newinfo = new DisplayInfo(info);
-                        newinfo.supportedModes = Arrays.stream(supportedModes)
-                                .sorted(Comparator.comparing(m -> (m.getModeId() == modeId) ? 0 : 1))
-                                .toArray(Display.Mode[]::new);
-                        param.setResult(newinfo);
-                    }
+                    if (supportedModes == null || supportedModes.length == 0) return;
+                    final var activeMode = info.getMode();
+
+                    // sort active mode to the first in supportedModes to worsettingskaround buggy apps that assumes the first mode is the active mode
+                    // sorting policy:
+                    // 1. active mode
+                    // 2. alternative refresh rates of active resolution
+                    // 3. other modes
+                    final var sortedModes = Arrays.copyOf(supportedModes, supportedModes.length);
+                    Arrays.sort(sortedModes, Comparator.comparing(o -> {
+                        if (o.getModeId() == activeMode.getModeId()) return 0;
+                        if (o.getPhysicalWidth() == activeMode.getPhysicalWidth() && o.getPhysicalHeight() == activeMode.getPhysicalHeight()) {
+                            return 1;
+                        }
+                        return 2;
+                    }));
+                    var newinfo = new DisplayInfo(info);
+                    newinfo.supportedModes = sortedModes;
+                    param.setResult(newinfo);
                 }
             }
         });
